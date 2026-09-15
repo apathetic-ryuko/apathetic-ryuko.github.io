@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Trading</title>
+    <!-- Подключаем красивый шрифт для аниме-тематики -->
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Comfortaa:wght@700&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* Светло-фиолетовый градиентный фон */
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+            font-family: 'Poppins', 'Comfortaa', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Декоративные аниме-круги на фоне */
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #c084fc, #a855f7);
+            filter: blur(80px);
+            opacity: 0.5;
+            z-index: 1;
+        }
+        .circle-1 { width: 300px; height: 300px; top: -10%; left: -10%; }
+        .circle-2 { width: 400px; height: 400px; bottom: -20%; right: -10%; }
+
+        /* Основной контейнер карточки */
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.45);
+            padding: 3rem 4rem;
+            border-radius: 24px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 40px rgba(168, 85, 247, 0.15);
+            z-index: 2;
+            max-width: 90%;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        /* Большой эффектный заголовок */
+        .fancy-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            /* Эффект градиентного текста */
+            background: linear-gradient(45deg, #6b21a8, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            /* Тень для объема */
+            filter: drop-shadow(0px 4px 12px rgba(168, 85, 247, 0.3));
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #581c87;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        /* Простая анимация появления */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Адаптивность под мобильные экраны */
+        @media (max-width: 600px) {
+            .fancy-title { font-size: 2.8rem; }
+            .container { padding: 2rem 1.5rem; }
+            .subtitle { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Задний план -->
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+
+    <!-- Основной контент -->
+    <div class="container">
+        <h1 class="fancy-title">Anime<br>Trading</h1>
+        <p class="subtitle">Collect • Trade • Battle</p>
+    </div>
+
+</body>
+</html>
