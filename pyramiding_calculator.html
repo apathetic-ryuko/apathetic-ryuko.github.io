@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Пирамидинг — калькулятор</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #1a1a1a; color: #e0e0e0; min-height: 100vh; padding: 2rem 1rem; }
+  h1 { font-size: 22px; font-weight: 500; color: #f0f0f0; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 13px; color: #666; margin-bottom: 1.5rem; }
+  .container { max-width: 900px; margin: 0 auto; }
+  .params-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+  .param-card { background: #242424; border: 0.5px solid #333; border-radius: 12px; padding: 1rem 1.25rem; }
+  .param-label { font-size: 12px; color: #888; margin-bottom: 6px; }
+  .param-value { font-size: 22px; font-weight: 500; color: #f0f0f0; margin-bottom: 10px; }
+  input[type=range] {
+    width: 100%; cursor: pointer; appearance: none;
+    height: 4px; border-radius: 2px; outline: none;
+    background: #3a3a3a;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    appearance: none; width: 16px; height: 16px;
+    border-radius: 50%; background: #a0a0a0; cursor: pointer;
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 16px; height: 16px; border: none;
+    border-radius: 50%; background: #a0a0a0; cursor: pointer;
+  }
+  .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+  .metric { background: #242424; border: 0.5px solid #333; border-radius: 8px; padding: 1rem; }
+  .metric-label { font-size: 12px; color: #888; margin-bottom: 4px; }
+  .metric-value { font-size: 20px; font-weight: 500; }
+  .table-wrap { background: #1e1e1e; border: 0.5px solid #333; border-radius: 12px; overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #242424; color: #888; font-weight: 500; padding: 9px 12px; text-align: right; border-bottom: 0.5px solid #333; }
+  th:first-child { text-align: left; }
+  td { padding: 7px 12px; text-align: right; border-bottom: 0.5px solid #2a2a2a; color: #ccc; }
+  td:first-child { text-align: left; color: #666; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #242424; }
+  .positive { color: #4caf84; }
+  .highlight td { background: #242424; color: #f0f0f0; font-weight: 500; }
+  .note { font-size: 12px; color: #555; text-align: center; padding: 8px; }
+  @media (max-width: 560px) {
+    .params-grid { grid-template-columns: 1fr; }
+    .results-grid { grid-template-columns: 1fr; }
+    th, td { padding: 6px 8px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Калькулятор пирамидинг стратегии</h1>
+  <p class="subtitle">Теоретический расчёт без учёта комиссий и проскальзывания</p>
+
+  <div class="params-grid">
+    <div class="param-card">
+      <p class="param-label">Начальный капитал ($)</p>
+      <p class="param-value" id="capital-out">1 000</p>
+      <input type="range" min="100" max="100000" step="100" value="1000" id="capital">
+    </div>
+    <div class="param-card">
+      <p class="param-label">Кредитное плечо</p>
+      <p class="param-value" id="leverage-out">×10</p>
+      <input type="range" min="1" max="20" step="1" value="10" id="leverage">
+    </div>
+    <div class="param-card">
+      <p class="param-label">Рост актива (%, безоткатный)</p>
+      <p class="param-value" id="move-out">5%</p>
+      <input type="range" min="1" max="50" step="1" value="5" id="move">
+    </div>
+    <div class="param-card">
+      <p class="param-label">Шаг доливки</p>
+      <p class="param-value" id="step-out">1%</p>
+      <input type="range" min="0" max="13" step="1" value="3" id="step">
+    </div>
+  </div>
+
+  <div class="results-grid" id="results"></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Шаг</th>
+          <th>% роста актива</th>
+          <th>Нереал. P&L</th>
+          <th>Доливка (P&L × плечо)</th>
+          <th>Размер позиции</th>
+          <th>Прирост к кап.</th>
+        </tr>
+      </thead>
+      <tbody id="steps-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const STEPS = [0.1, 0.33, 0.5, 1, 1.5, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+function fmt(n) { return n.toLocaleString('ru-RU', {maximumFractionDigits: 2}); }
+function fmtPct(n) { return (n >= 0 ? '+' : '') + n.toFixed(2) + '%'; }
+
+function calc() {
+  const capital = +document.getElementById('capital').value;
+  const leverage = +document.getElementById('leverage').value;
+  const totalMove = +document.getElementById('move').value / 100;
+  const stepIdx = +document.getElementById('step').value;
+  const stepPct = STEPS[stepIdx] / 100;
+
+  document.getElementById('capital-out').textContent = fmt(capital);
+  document.getElementById('leverage-out').textContent = '×' + leverage;
+  document.getElementById('move-out').textContent = document.getElementById('move').value + '%';
+  document.getElementById('step-out').textContent = STEPS[stepIdx] + '%';
+
+  const numSteps = Math.floor(totalMove / stepPct);
+
+  let units = capital * leverage;
+  let entrySpend = capital * leverage;
+  let pnlUsed = 0;
+
+  const rows = [];
+  rows.push({ step: 0, price: 1.0, unrealPnl: 0, added: 0, posSize: entrySpend, returnPct: 0 });
+
+  for (let i = 1; i <= numSteps; i++) {
+    const price = 1 + i * stepPct;
+    const totalUnreal = units * price - entrySpend;
+    const incrementalPnl = totalUnreal - pnlUsed;
+    if (incrementalPnl <= 0) continue;
+    const added = incrementalPnl * leverage;
+    units += added / price;
+    entrySpend += added;
+    pnlUsed = units * price - entrySpend;
+    const posSize = units * price;
+    const returnPct = ((posSize - entrySpend) / capital) * 100;
+    rows.push({ step: i, price, unrealPnl: totalUnreal, added, posSize, returnPct });
+  }
+
+  const finalPrice = 1 + totalMove;
+  const finalPnl = units * finalPrice - entrySpend;
+  const finalReturn = (finalPnl / capital) * 100;
+  const simpleReturn = leverage * totalMove * 100;
+  const boost = finalReturn - simpleReturn;
+
+  document.getElementById('results').innerHTML = `
+    <div class="metric"><p class="metric-label">Итоговый P&L</p><p class="metric-value positive">$${fmt(finalPnl)}</p></div>
+    <div class="metric"><p class="metric-label">Прирост к капиталу</p><p class="metric-value positive">${finalReturn.toFixed(1)}%</p></div>
+    <div class="metric"><p class="metric-label">Буст vs без доливок</p><p class="metric-value positive">+${boost.toFixed(1)}%</p></div>
+  `;
+
+  const tbody = document.getElementById('steps-body');
+  tbody.innerHTML = '';
+  const MAX = 200;
+  rows.slice(0, MAX).forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${r.step === 0 ? 'Старт' : 'Шаг ' + r.step}</td>
+      <td>${((r.price - 1) * 100).toFixed(2)}%</td>
+      <td class="${r.unrealPnl >= 0 ? 'positive' : ''}">$${fmt(r.unrealPnl)}</td>
+      <td>${r.step === 0 ? '—' : '$' + fmt(r.added)}</td>
+      <td>$${fmt(r.posSize)}</td>
+      <td class="${r.returnPct >= 0 ? 'positive' : ''}">${fmtPct(r.returnPct)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  if (rows.length > MAX) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td colspan="6" class="note">... первые ${MAX} из ${rows.length} шагов ...</td>`;
+    tbody.appendChild(tr);
+  }
+
+  const ft = document.createElement('tr');
+  ft.className = 'highlight';
+  ft.innerHTML = `
+    <td>Итог</td>
+    <td>${(totalMove * 100).toFixed(1)}%</td>
+    <td>—</td>
+    <td>—</td>
+    <td>$${fmt(units * finalPrice)}</td>
+    <td class="positive">${fmtPct(finalReturn)}</td>
+  `;
+  tbody.appendChild(ft);
+}
+
+['capital', 'leverage', 'move', 'step'].forEach(id => {
+  document.getElementById(id).addEventListener('input', calc);
+});
+calc();
+</script>
+</body>
+</html>
