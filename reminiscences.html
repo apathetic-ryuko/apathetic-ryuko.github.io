@@ -1172,13 +1172,11 @@
             // Отметки банкротств: капитал ушёл в минус или обнулился
             const bankruptIdx = capital.map((v, i) => (v !== null && v <= 0) ? i : -1).filter(i => i >= 0);
 
-            // Выравниваем ноль на обеих осях: одинаковая доля высоты слева и справа
+            // Диапазоны осей: слева — условный капитал (есть минус), справа — реальная биография (от нуля)
             const capVals = capital.filter(v => v !== null);
             const LMIN = Math.min(...capVals) - 30000;
             const LMAX = Math.max(...capVals) + 250000;
-            const zeroFrac = -LMIN / (LMAX - LMIN);
             const RMAX = 105000000;
-            const RMIN = -zeroFrac * RMAX / (1 - zeroFrac);
 
             // Краткие описания сделок для тултипов
             const descs = [
@@ -1327,16 +1325,27 @@
                                 font: { family: "'JetBrains Mono', monospace", size: 10 },
                                 callback: v => fmt(v)
                             },
+                            afterBuildTicks(axis) {
+                                // фиксированная сетка с обязательным нулём
+                                const ticks = [{ value: -100000 }];
+                                for (let v = 0; v <= axis.max; v += 1000000) ticks.push({ value: v });
+                                axis.ticks = ticks;
+                            },
                             grid: { color: 'rgba(255,255,255,0.06)' }
                         },
                         y1: {
-                            min: RMIN,
+                            min: 0,
                             max: RMAX,
                             position: 'right',
                             ticks: {
                                 color: '#7d92ad',
                                 font: { family: "'JetBrains Mono', monospace", size: 10 },
                                 callback: v => fmt(v)
+                            },
+                            afterBuildTicks(axis) {
+                                const ticks = [];
+                                for (let v = 0; v <= 100000000; v += 25000000) ticks.push({ value: v });
+                                axis.ticks = ticks;
                             },
                             grid: { drawOnChartArea: false }
                         }
