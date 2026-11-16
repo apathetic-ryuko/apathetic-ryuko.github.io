@@ -331,6 +331,42 @@
             line-height: 1.8;
         }
         .chart-note a { color: var(--sepia); }
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 22px;
+            justify-content: center;
+            padding: 0.2rem 0.4rem 0.9rem;
+        }
+        .chart-legend button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: none;
+            padding: 0.2rem 0;
+            color: var(--body);
+            font-family: 'Golos Text', sans-serif;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .chart-legend button.off { opacity: 0.38; text-decoration: line-through; }
+        .lg-icon { display: inline-block; position: relative; width: 30px; height: 12px; }
+        .lg-icon.lg-bar {
+            width: 22px;
+            border-radius: 3px;
+            background: linear-gradient(90deg, rgba(123, 168, 137, 0.85) 50%, rgba(179, 85, 77, 0.85) 50%);
+        }
+        .lg-icon.lg-line::before, .lg-icon.lg-dash::before {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; top: 50%;
+            height: 2px;
+            margin-top: -1px;
+        }
+        .lg-icon.lg-line::before { background: var(--sepia); }
+        .lg-icon.lg-dash::before { background: repeating-linear-gradient(90deg, #7d92ad 0 6px, transparent 6px 11px); }
         .table-wrap {
             border: 1px solid var(--line);
             border-radius: 12px;
@@ -974,6 +1010,7 @@
         <h2 class="section-title">Американские горки капитала</h2>
         <p>Если сложить цифры из конспекта в одну линию, получается не график роста, а американские горки: миллионы зарабатывались и терялись по несколько раз. Ниже — приближённая реконструкция: столбцы — результат каждого эпизода, золотая линия — условный капитал, если складывать только известные цифры. Красные точки на дне — банкротства. Серо-синий пунктир (правая ось) — якоря из реальной биографии Ливермора: видно, где книга занижает, а где совпадает с жизнью.</p>
         <div class="chart-box">
+            <div class="chart-legend" id="chartLegend"></div>
             <div style="position:relative;height:min(380px,62vw)">
                 <canvas id="capitalChart" aria-label="График капитала Ларри Ливингстона по эпизодам книги"></canvas>
             </div>
@@ -1162,7 +1199,7 @@
 
             const UP = '#7ba889', DOWN = '#b3554d', SEPIA = '#c9a86a', BODY = '#cfc9ba';
 
-            new Chart(canvas, {
+            const chart = new Chart(canvas, {
                 data: {
                     labels,
                     datasets: [
@@ -1219,14 +1256,7 @@
                     maintainAspectRatio: false,
                     interaction: { mode: 'index', intersect: false },
                     plugins: {
-                        legend: {
-                            labels: {
-                                color: BODY,
-                                font: { family: "'Golos Text', sans-serif", size: 12 },
-                                usePointStyle: true,
-                                pointStyleWidth: 34
-                            }
-                        },
+                        legend: { display: false },
                         tooltip: {
                             backgroundColor: 'rgba(14,16,19,0.95)',
                             borderColor: '#272d36',
@@ -1292,6 +1322,26 @@
                     }
                 }
             });
+
+            // Своя легенда: иконки по стилю серий, клик скрывает/показывает серию
+            const legendBox = document.getElementById('chartLegend');
+            if (legendBox) {
+                chart.data.datasets.forEach((ds, di) => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    const icon = document.createElement('i');
+                    icon.className = 'lg-icon ' + (ds.type === 'bar' ? 'lg-bar' : (ds.yAxisID === 'y1' ? 'lg-dash' : 'lg-line'));
+                    btn.appendChild(icon);
+                    btn.appendChild(document.createTextNode(ds.label));
+                    btn.addEventListener('click', () => {
+                        const vis = chart.isDatasetVisible(di);
+                        chart.setDatasetVisibility(di, !vis);
+                        btn.classList.toggle('off', vis);
+                        chart.update();
+                    });
+                    legendBox.appendChild(btn);
+                });
+            }
         })();
     </script>
 
