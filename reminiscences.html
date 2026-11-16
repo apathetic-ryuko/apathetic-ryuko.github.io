@@ -1344,8 +1344,8 @@
                                 callback: v => fmt(v)
                             },
                             afterBuildTicks(axis) {
-                                // фиксированная сетка с обязательным нулём
-                                const ticks = [{ value: -100000 }];
+                                // фиксированная сетка от нуля (минусовая подпись наезжала на 0)
+                                const ticks = [];
                                 for (let v = 0; v <= axis.max; v += 1000000) ticks.push({ value: v });
                                 axis.ticks = ticks;
                             },
