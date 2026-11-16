@@ -1168,6 +1168,7 @@
                         {
                             type: 'bar',
                             label: 'Результат эпизода',
+                            pointStyle: 'rectRounded',
                             data: results,
                             backgroundColor: results.map(v => v === null ? 'rgba(179,85,77,0.28)' : (v >= 0 ? 'rgba(123,168,137,0.75)' : 'rgba(179,85,77,0.75)')),
                             borderColor: results.map(v => v === null ? DOWN : (v >= 0 ? UP : DOWN)),
@@ -1178,6 +1179,7 @@
                         {
                             type: 'line',
                             label: 'Условный капитал',
+                            pointStyle: 'line',
                             data: capital,
                             borderColor: SEPIA,
                             backgroundColor: 'rgba(201,168,106,0.08)',
@@ -1193,6 +1195,7 @@
                         {
                             type: 'line',
                             label: 'Реальный Ливермор (биография)',
+                            pointStyle: 'dash',
                             data: real,
                             yAxisID: 'y1',
                             borderColor: '#7d92ad',
@@ -1216,7 +1219,12 @@
                     interaction: { mode: 'index', intersect: false },
                     plugins: {
                         legend: {
-                            labels: { color: BODY, font: { family: "'Golos Text', sans-serif", size: 12 }, boxWidth: 14 }
+                            labels: {
+                                color: BODY,
+                                font: { family: "'Golos Text', sans-serif", size: 12 },
+                                usePointStyle: true,
+                                pointStyleWidth: 34
+                            }
                         },
                         tooltip: {
                             backgroundColor: 'rgba(14,16,19,0.95)',
