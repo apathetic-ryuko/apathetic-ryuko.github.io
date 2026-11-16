@@ -1169,8 +1169,8 @@
                 run += e[1];
                 return Math.round(run / 1000) * 1000;
             }).concat([null, null, null]); // точки за пределами книги
-            // Отметки банкротств: капитал ушёл в минус или обнулился
-            const bankruptIdx = capital.map((v, i) => (v !== null && v <= 0) ? i : -1).filter(i => i >= 0);
+            // Отметки банкротств: капитал ушёл в минус или обнулился (первая точка — старт с $3.12, не банкротство)
+            const bankruptIdx = capital.map((v, i) => (i > 0 && v !== null && v <= 0) ? i : -1).filter(i => i >= 0);
 
             // Диапазоны осей: слева — условный капитал (есть минус), справа — реальная биография (от нуля)
             const capVals = capital.filter(v => v !== null);
@@ -1231,19 +1231,35 @@
                         {
                             type: 'line',
                             label: 'Условный капитал',
-                            pointStyle: 'line',
                             data: capital,
                             borderColor: SEPIA,
                             backgroundColor: 'rgba(201,168,106,0.08)',
                             fill: true,
                             tension: 0.25,
                             borderWidth: 2,
-                            pointRadius: capital.map((v, i) => bankruptIdx.includes(i) ? 7 : 2.5),
-                            pointHoverRadius: 8,
-                            pointBackgroundColor: capital.map((v, i) => bankruptIdx.includes(i) ? '#161a20' : SEPIA),
-                            pointBorderColor: capital.map((v, i) => bankruptIdx.includes(i) ? DOWN : SEPIA),
-                            pointBorderWidth: capital.map((v, i) => bankruptIdx.includes(i) ? 2.5 : 1),
+                            pointRadius: 2.5,
+                            pointHoverRadius: 5,
+                            pointBackgroundColor: SEPIA,
+                            pointBorderColor: SEPIA,
                             order: 1
+                        },
+                        {
+                            // Кольца банкротств — отдельный слой, рисуется поверх столбцов
+                            type: 'line',
+                            label: 'Банкротство',
+                            isBust: true,
+                            skipLegend: true,
+                            data: capital.map((v, i) => bankruptIdx.includes(i) ? v : null),
+                            showLine: false,
+                            pointStyle: 'circle',
+                            pointRadius: capital.map((v, i) => bankruptIdx.includes(i) ? 7 : 0),
+                            pointHoverRadius: 8,
+                            pointBackgroundColor: '#161a20',
+                            pointBorderColor: DOWN,
+                            pointBorderWidth: 2.5,
+                            pointHoverBackgroundColor: '#161a20',
+                            pointHoverBorderColor: DOWN,
+                            order: 3
                         },
                         {
                             type: 'line',
@@ -1280,6 +1296,8 @@
                             bodyColor: BODY,
                             footerColor: '#8d8776',
                             footerFont: { family: "'Golos Text', sans-serif", size: 11, style: 'italic' },
+                            usePointStyle: true,
+                            filter: item => !item.dataset.isBust,
                             callbacks: {
                                 label(ctx) {
                                     const i = ctx.dataIndex;
@@ -1357,6 +1375,7 @@
             const legendBox = document.getElementById('chartLegend');
             if (legendBox) {
                 chart.data.datasets.forEach((ds, di) => {
+                    if (ds.skipLegend) return;
                     const btn = document.createElement('button');
                     btn.type = 'button';
                     const icon = document.createElement('i');
