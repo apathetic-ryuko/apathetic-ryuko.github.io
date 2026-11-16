@@ -367,6 +367,17 @@
         }
         .lg-icon.lg-line::before { background: var(--sepia); }
         .lg-icon.lg-dash::before { background: repeating-linear-gradient(90deg, #7d92ad 0 6px, transparent 6px 11px); }
+        .chart-legend .lg-static { cursor: default; }
+        .lg-icon.lg-bust::before {
+            content: '';
+            position: absolute;
+            left: 50%; top: 50%;
+            width: 10px; height: 10px;
+            margin: -5px 0 0 -5px;
+            border: 2.5px solid #b3554d;
+            border-radius: 50%;
+            background: #161a20;
+        }
         .table-wrap {
             border: 1px solid var(--line);
             border-radius: 12px;
@@ -1229,10 +1240,11 @@
                             fill: true,
                             tension: 0.25,
                             borderWidth: 2,
-                            pointRadius: capital.map((v, i) => bankruptIdx.includes(i) ? 6 : 2.5),
-                            pointHoverRadius: 7,
-                            pointBackgroundColor: capital.map((v, i) => bankruptIdx.includes(i) ? DOWN : SEPIA),
+                            pointRadius: capital.map((v, i) => bankruptIdx.includes(i) ? 7 : 2.5),
+                            pointHoverRadius: 8,
+                            pointBackgroundColor: capital.map((v, i) => bankruptIdx.includes(i) ? '#161a20' : SEPIA),
                             pointBorderColor: capital.map((v, i) => bankruptIdx.includes(i) ? DOWN : SEPIA),
+                            pointBorderWidth: capital.map((v, i) => bankruptIdx.includes(i) ? 2.5 : 1),
                             order: 1
                         },
                         {
@@ -1350,6 +1362,15 @@
                     });
                     legendBox.appendChild(btn);
                 });
+                // Статичный пункт легенды: банкротства (не переключатель)
+                const bust = document.createElement('span');
+                bust.className = 'lg-static';
+                bust.style.cssText = 'display:inline-flex;align-items:center;gap:0.5rem;color:var(--body);font-family:\'Golos Text\',sans-serif;font-size:0.78rem;padding:0.2rem 0;';
+                const bustIcon = document.createElement('i');
+                bustIcon.className = 'lg-icon lg-bust';
+                bust.appendChild(bustIcon);
+                bust.appendChild(document.createTextNode('Банкротство'));
+                legendBox.appendChild(bust);
             }
         })();
     </script>
