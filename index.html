@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anime Trading</title>
     <!-- Подключаем красивый шрифт для аниме-тематики -->
-    <link rel="preconnect" href="https://googleapis.com">
-    <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Comfortaa:wght@700&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+
     <style>
         * {
             margin: 0;
@@ -24,8 +24,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
+            padding: 3rem 1rem;
         }
 
         /* Декоративные аниме-круги на фоне */
@@ -40,39 +41,83 @@
         .circle-1 { width: 300px; height: 300px; top: -10%; left: -10%; }
         .circle-2 { width: 400px; height: 400px; bottom: -20%; right: -10%; }
 
+        /* Падающие лепестки сакуры */
+        .petal {
+            position: fixed;
+            top: -8vh;
+            z-index: 1;
+            pointer-events: none;
+            animation: fall linear infinite;
+            opacity: 0;
+            filter: drop-shadow(0 2px 3px rgba(168, 85, 247, 0.2));
+        }
+        @keyframes fall {
+            0%   { transform: translate3d(0, -10vh, 0) rotate(0deg); opacity: 0; }
+            8%   { opacity: 0.85; }
+            100% { transform: translate3d(var(--sway), 112vh, 0) rotate(340deg); opacity: 0.25; }
+        }
+
+        /* Мерцающие блёстки */
+        .sparkle {
+            position: fixed;
+            z-index: 1;
+            pointer-events: none;
+            color: #c084fc;
+            text-shadow: 0 0 10px rgba(192, 132, 252, 0.8);
+            animation: twinkle 2.6s ease-in-out infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.1; transform: scale(0.7) rotate(0deg); }
+            50%      { opacity: 0.9; transform: scale(1.2) rotate(20deg); }
+        }
+
         /* Основной контейнер карточки */
         .container {
             text-align: center;
             background: rgba(255, 255, 255, 0.45);
-            padding: 3rem 4rem;
+            padding: 3rem 3.5rem;
             border-radius: 24px;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.6);
             box-shadow: 0 20px 40px rgba(168, 85, 247, 0.15);
             z-index: 2;
-            max-width: 90%;
+            max-width: 860px;
+            width: 100%;
             animation: fadeIn 1.2s ease-out;
         }
 
-        /* Большой эффектный заголовок */
+        /* Японская надстрочная подпись */
+        .jp-tagline {
+            font-family: 'Comfortaa', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 6px;
+            color: #a855f7;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Большой эффектный заголовок с переливающимся градиентом */
         .fancy-title {
-            font-size: 4.5rem;
+            font-size: 4rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: -1px;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            /* Эффект градиентного текста */
-            background: linear-gradient(45deg, #6b21a8, #a855f7, #ec4899);
+            line-height: 1.05;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #6b21a8, #a855f7, #ec4899, #a855f7, #6b21a8);
+            background-size: 220% auto;
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
-            /* Тень для объема */
             filter: drop-shadow(0px 4px 12px rgba(168, 85, 247, 0.3));
+            animation: shine 6s linear infinite;
+        }
+        @keyframes shine {
+            to { background-position: 220% center; }
         }
 
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1.05rem;
             color: #581c87;
             font-weight: 600;
             letter-spacing: 2px;
@@ -80,23 +125,74 @@
             opacity: 0.8;
         }
 
+        /* Карточки-ссылки на страницы проекта */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 16px;
+            margin-top: 2.4rem;
+            text-align: left;
+        }
+        .card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            background: rgba(255, 255, 255, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 18px;
+            padding: 1.4rem 1.2rem;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 16px 30px rgba(168, 85, 247, 0.25);
+        }
+        .card-emoji { font-size: 2rem; margin-bottom: 0.6rem; }
+        .card h2 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #581c87;
+            margin-bottom: 0.4rem;
+        }
+        .card p {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: #7e22ce;
+            opacity: 0.85;
+        }
+        .card .go {
+            display: inline-block;
+            margin-top: 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #a855f7;
+            transition: transform 0.25s ease;
+        }
+        .card:hover .go { transform: translateX(4px); }
+
+        .footer {
+            margin-top: 2.2rem;
+            font-size: 0.8rem;
+            color: #7e22ce;
+            opacity: 0.6;
+            letter-spacing: 1px;
+        }
+
         /* Простая анимация появления */
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         /* Адаптивность под мобильные экраны */
         @media (max-width: 600px) {
-            .fancy-title { font-size: 2.8rem; }
+            .fancy-title { font-size: 2.6rem; }
             .container { padding: 2rem 1.5rem; }
-            .subtitle { font-size: 1rem; }
+            .subtitle { font-size: 0.9rem; }
+            .jp-tagline { letter-spacing: 4px; }
         }
     </style>
 </head>
@@ -108,9 +204,62 @@
 
     <!-- Основной контент -->
     <div class="container">
+        <p class="jp-tagline">アニメ・トレーディング</p>
         <h1 class="fancy-title">Anime<br>Trading</h1>
-        <p class="subtitle">Collect • Trade • Battle</p>
+        <p class="subtitle">аниме · инвестиции · финансовая грамотность</p>
+
+        <div class="cards">
+            <a class="card" href="candle-run.html">
+                <div class="card-emoji">🕯️</div>
+                <h2>Candle Run</h2>
+                <p>Атмосферный 3D-платформер: проведи Нику по крышам ночного города по японским свечам — навстречу рассвету.</p>
+                <span class="go">Играть →</span>
+            </a>
+            <a class="card" href="pyramiding_calculator.html">
+                <div class="card-emoji">📈</div>
+                <h2>Калькулятор пирамидинга</h2>
+                <p>Теоретический расчёт доливок с кредитным плечом: капитал, шаг доливки и итоговый прирост к депозиту.</p>
+                <span class="go">Считать →</span>
+            </a>
+            <a class="card" href="https://t.me/animetrading" target="_blank" rel="noopener">
+                <div class="card-emoji">💬</div>
+                <h2>Телеграм-канал</h2>
+                <p>Канал animetrading: опыт трейдинга и инвестиций, разборы сделок и новости проекта.</p>
+                <span class="go">Читать →</span>
+            </a>
+        </div>
+
+        <p class="footer">сделано с ♡ командой animetrading</p>
     </div>
+
+    <script>
+        // Лепестки сакуры и блёстки — чисто декоративный слой
+        const PETALS = 14, SPARKLES = 10;
+        const petalChars = ['🌸', '🌺', '💮'];
+
+        for (let i = 0; i < PETALS; i++) {
+            const p = document.createElement('span');
+            p.className = 'petal';
+            p.textContent = petalChars[i % petalChars.length];
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.fontSize = (0.8 + Math.random() * 1.1) + 'rem';
+            p.style.animationDuration = (9 + Math.random() * 10) + 's';
+            p.style.animationDelay = (-Math.random() * 18) + 's';
+            p.style.setProperty('--sway', (Math.random() * 24 - 12) + 'vw');
+            document.body.appendChild(p);
+        }
+
+        for (let i = 0; i < SPARKLES; i++) {
+            const s = document.createElement('span');
+            s.className = 'sparkle';
+            s.textContent = '✦';
+            s.style.left = Math.random() * 100 + 'vw';
+            s.style.top = Math.random() * 100 + 'vh';
+            s.style.fontSize = (0.6 + Math.random() * 0.9) + 'rem';
+            s.style.animationDelay = (-Math.random() * 2.6) + 's';
+            document.body.appendChild(s);
+        }
+    </script>
 
 </body>
 </html>

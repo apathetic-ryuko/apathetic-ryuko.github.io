@@ -1,0 +1,9 @@
+{
+  "name": "animetrading-site",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Anime Trading — аниме, инвестиции и финансовая грамотность",
+  "scripts": {
+    "dev": "npx --yes http-server -c-1 ."
+  }
+}
