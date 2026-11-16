@@ -1163,6 +1163,14 @@
             // Отметки банкротств: капитал ушёл в минус или обнулился
             const bankruptIdx = capital.map((v, i) => (v !== null && v <= 0) ? i : -1).filter(i => i >= 0);
 
+            // Выравниваем ноль на обеих осях: одинаковая доля высоты слева и справа
+            const capVals = capital.filter(v => v !== null);
+            const LMIN = Math.min(...capVals) - 30000;
+            const LMAX = Math.max(...capVals) + 250000;
+            const zeroFrac = -LMIN / (LMAX - LMIN);
+            const RMAX = 105000000;
+            const RMIN = -zeroFrac * RMAX / (1 - zeroFrac);
+
             // Краткие описания сделок для тултипов
             const descs = [
                 'Все свои деньги — в акции по наводке, проверенной по дневнику',
@@ -1242,11 +1250,11 @@
                             spanGaps: true,
                             fill: false,
                             tension: 0,
-                            pointRadius: real.map(v => v === null ? 0 : 5),
-                            pointHoverRadius: 7,
+                            pointRadius: real.map(v => v === null ? 0 : 3),
+                            pointHoverRadius: 6,
                             pointBackgroundColor: real.map((v, i) => i === IDX_1929 ? '#161a20' : '#7d92ad'),
                             pointBorderColor: '#7d92ad',
-                            pointBorderWidth: 2,
+                            pointBorderWidth: 1.5,
                             order: 0
                         }
                     ]
@@ -1303,6 +1311,8 @@
                             grid: { display: false }
                         },
                         y: {
+                            min: LMIN,
+                            max: LMAX,
                             ticks: {
                                 color: '#8d8776',
                                 font: { family: "'JetBrains Mono', monospace", size: 10 },
@@ -1311,6 +1321,8 @@
                             grid: { color: 'rgba(255,255,255,0.06)' }
                         },
                         y1: {
+                            min: RMIN,
+                            max: RMAX,
                             position: 'right',
                             ticks: {
                                 color: '#7d92ad',
