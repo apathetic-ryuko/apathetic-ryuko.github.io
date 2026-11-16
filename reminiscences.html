@@ -201,6 +201,58 @@
         .about p { margin-bottom: 1rem; }
         .about .lead { font-size: 1.12rem; color: var(--ink); }
 
+        /* ── Оглавление ─────────────────────── */
+        .toc { padding-bottom: 1rem; }
+        .toc-panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 1.6rem 1.4rem 0.9rem;
+        }
+        .toc-shortcuts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 1.3rem;
+        }
+        .toc-shortcuts a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--sepia);
+            text-decoration: none;
+            border: 1px solid rgba(201, 168, 106, 0.45);
+            border-radius: 999px;
+            padding: 0.5rem 1rem;
+            transition: background 0.2s, color 0.2s;
+        }
+        .toc-shortcuts a:hover { background: var(--sepia); color: #14171c; }
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 0 18px;
+        }
+        .toc-grid a {
+            display: flex;
+            gap: 0.7rem;
+            align-items: baseline;
+            padding: 0.5rem 0.3rem;
+            text-decoration: none;
+            color: var(--body);
+            font-size: 0.87rem;
+            line-height: 1.5;
+            border-bottom: 1px solid #1d222a;
+            transition: color 0.2s, padding-left 0.2s;
+        }
+        .toc-grid a:hover { color: var(--ink); padding-left: 0.7rem; }
+        .toc-grid a .n {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.66rem;
+            color: var(--sepia);
+            white-space: nowrap;
+        }
+
         /* ── Главы ─────────────────────────────── */
         .chapter {
             max-width: 730px;
@@ -278,6 +330,7 @@
             color: var(--muted);
             line-height: 1.8;
         }
+        .chart-note a { color: var(--sepia); }
         .table-wrap {
             border: 1px solid var(--line);
             border-radius: 12px;
@@ -427,6 +480,42 @@
                 <p class="lead">«Воспоминания биржевого спекулянта» Эдвина Лефевра вышли в 1923 году и стали библией трейдера: под именем Ларри Ливингстона скрывается реальный Джесси Ливермор — человек, который несколько раз становился миллионером и несколько раз терял всё.</p>
                 <p>Это не учебник, а честная исповедь: первые сделки в 14 лет, бакетшопы, крах 1907 года, миллионы на панике и банкротства, манипуляции, инсайдеры и вечная борьба с самим собой. Ниже — мой конспект по главам с акцентом на сделки. Тезисы и формулировки — как я их услышал, вольно и по делу.</p>
             </div>
+        </div>
+    </section>
+
+    <!-- ═══════ ОГЛАВЛЕНИЕ ═══════ -->
+    <section class="wrap toc reveal" id="toc">
+        <p class="ch-num">Оглавление</p>
+        <h2 class="section-title">Что внутри</h2>
+        <div class="toc-panel">
+            <div class="toc-shortcuts">
+                <a href="#trades">📈 График и история сделок</a>
+                <a href="#lessons">Уроки Ливермора</a>
+                <a href="#reality">Книга vs реальная жизнь</a>
+            </div>
+            <nav class="toc-grid">
+                <a href="#ch1"><span class="n">01</span>Первые деньги: $3.12 и бакетшопы</a>
+                <a href="#ch2"><span class="n">02–05</span>«Космополитан», маржа $10 000</a>
+                <a href="#ch6"><span class="n">06</span>Шорт Union Pacific и Саратога</a>
+                <a href="#ch7"><span class="n">07</span>Докупать прибыльные позиции</a>
+                <a href="#ch8"><span class="n">08</span>Три шорта олл-ин: −$300 тыс.</a>
+                <a href="#ch9"><span class="n">09</span>Паника 1907: первый миллион</a>
+                <a href="#ch10"><span class="n">10</span>Путь наименьшего сопротивления</a>
+                <a href="#ch11"><span class="n">11</span>Хлопок, пшеница, кукуруза</a>
+                <a href="#ch12"><span class="n">12</span>Наводка Томаса: крах на хлопке</a>
+                <a href="#ch13"><span class="n">13</span>Чикаго, долги и роль марионетки</a>
+                <a href="#ch14"><span class="n">14</span>Банкротство и камбэк 1915</a>
+                <a href="#ch15"><span class="n">15</span>Кофе против правительства</a>
+                <a href="#ch16"><span class="n">16</span>Подсказки и их любители</a>
+                <a href="#ch17"><span class="n">17</span>Сталь, медь и пшеница</a>
+                <a href="#ch18"><span class="n">18</span>Шорт ТТК против инсайдеров</a>
+                <a href="#ch19"><span class="n">19</span>Манипуляции, корнеры, Джеймс Кин</a>
+                <a href="#ch20"><span class="n">20</span>Как разогнать акции: опционы</a>
+                <a href="#ch21"><span class="n">21</span>Imperial Steel и Джон Прентисс</a>
+                <a href="#ch22"><span class="n">22</span>Печная компания: сбыт на $3,5 млн</a>
+                <a href="#ch23"><span class="n">23</span>Слухи, публика, инсайдеры</a>
+                <a href="#ch24"><span class="n">24</span>Финал: бесплатный сыр</a>
+            </nav>
         </div>
     </section>
 
@@ -848,7 +937,7 @@
     </article>
 
     <!-- ═══════ УРОКИ ═══════ -->
-    <section class="wrap lessons reveal">
+    <section class="wrap lessons reveal" id="lessons">
         <p class="ch-num">Выводы</p>
         <h2 class="section-title">Уроки Ливермора</h2>
         <div class="lessons-grid">
@@ -883,13 +972,14 @@
     <section class="wrap trades-section reveal" id="trades">
         <p class="ch-num">История сделок</p>
         <h2 class="section-title">Американские горки капитала</h2>
-        <p>Если сложить цифры из конспекта в одну линию, получается не график роста, а американские горки: миллионы зарабатывались и терялись по несколько раз. Ниже — приближённая реконструкция: столбцы — результат каждого эпизода, линия — условный капитал, если складывать только известные цифры. Красные точки на дне — банкротства.</p>
+        <p>Если сложить цифры из конспекта в одну линию, получается не график роста, а американские горки: миллионы зарабатывались и терялись по несколько раз. Ниже — приближённая реконструкция: столбцы — результат каждого эпизода, золотая линия — условный капитал, если складывать только известные цифры. Красные точки на дне — банкротства. Серо-синий пунктир (правая ось) — якоря из реальной биографии Ливермора: видно, где книга занижает, а где совпадает с жизнью.</p>
         <div class="chart-box">
             <div style="position:relative;height:min(380px,62vw)">
                 <canvas id="capitalChart" aria-label="График капитала Ларри Ливингстона по эпизодам книги"></canvas>
             </div>
         </div>
-        <p class="chart-note">Реконструкция по цифрам из конспекта, а не реальная история счёта: промежуточные сделки, расходы на яхты и то, сколько раз герой был миллионером, в книге не посчитать. Хлопок-1908 показан обнулением — «от миллионов остались сотни тысяч».</p>
+        <p class="chart-note">Реконструкция по цифрам из конспекта, а не реальная история счёта: промежуточные сделки, расходы на яхты и то, сколько раз герой был миллионером, в книге не посчитать. Точка «реванш» (+$750 тыс.) — глава 9: после слива $300 тыс. герой отбился ещё до паники и уехал во Францию с этой суммой, поэтому «одна ошибка» 1908 года (−$1 млн) его не обнулила — обнулил уже хлопок по наводке Томаса: «от миллионов остались сотни тысяч», а потом и долги. Поэтому хлопок-1908 показан обнулением.<br>
+        Пунктиром (правая ось) — якоря из реальной биографии Джесси Ливермора: ~$3 млн за панику 1907-го (книга занижает до «больше миллиона»), после хлопка осталось &lt;$300 тыс., банкротство в феврале 1915-го, ~$100 млн в 1929-м (легенда — ни один документ эпохи не подтверждает), банкротство 1934-го и финал 1940-го. Источники: Richard Smitten «Jesse Livermore: World’s Greatest Stock Trader», <a href="https://jesse-livermore.com/jesse-livermore-timeline.html" target="_blank" rel="noopener">jesse-livermore.com</a>, NYT (18.02.1915).</p>
 
         <div class="table-wrap">
             <table class="trades">
@@ -909,6 +999,7 @@
                     <tr><td class="year">1906</td><td>Саратога-Спрингс: шорт по совету Хардинга</td><td>Union Pacific · шорт 4 000</td><td class="num neg">−$40 000</td><td>Послушал чужой совет вместо своего анализа</td></tr>
                     <tr><td class="year">1906</td><td>Лонг на хаях по своему чутью</td><td>Union Pacific · лонг</td><td class="num pos">+$15 000</td><td>Отбил часть убытка, перестал следить за отдельными акциями</td></tr>
                     <tr><td class="year">~1906</td><td>Три попытки зашортить рынок олл-ин</td><td>рынок · шорт</td><td class="num neg">−$300 000</td><td>Обнулился на отскоках — правильный прогноз, неправильное время</td></tr>
+                    <tr><td class="year">1907</td><td>Реванш: вернулся в игру и уехал отдыхать во Францию</td><td>рынок · разное</td><td class="num pos">+$750 000</td><td>Капитал восстановлен ещё до паники — с этой суммой и начал шорт</td></tr>
                     <tr><td class="year">1907</td><td>Шорт в кризис ликвидности, 24 октября</td><td>рынок · шорт</td><td class="num pos">+$1 000 000+</td><td>Закрыл шорт на дне и переобулся в лонг</td></tr>
                     <tr><td class="year">1908</td><td>«Одна ошибка» после кризиса</td><td>—</td><td class="num neg">−$1 000 000</td><td>Просчёты бьют по карману и самолюбию</td></tr>
                     <tr><td class="year">1908</td><td>Лонг хлопка по наводке Перси Томаса</td><td>хлопок · лонг 440 тыс. кип</td><td class="num neg">~−90% капитала</td><td>Повёлся на чужую харизму; продал яхты, ушёл в долги</td></tr>
@@ -992,6 +1083,7 @@
                 ['1906 · Саратога', -40000],
                 ['1906 · лонг по чутью', 15000],
                 ['~1906 · три шорта олл-ин', -300000],
+                ['1907 · реванш, отпуск во Франции', 750000],
                 ['1907 · шорт в панику', 1000000],
                 ['1908 · одна ошибка', -1000000],
                 ['1908 · хлопок (совет Томаса)', null], // ~−90% капитала, точная сумма не названа
@@ -1006,17 +1098,56 @@
                 ['~1919 · шорт ТТК', 1000000]
             ];
 
-            const labels = episodes.map(e => e[0]);
-            const results = episodes.map(e => e[1]);
+            const BOOK_LEN = episodes.length;
+            // Якоря за пределами книги: ось дополняется тремя точками реальной биографии
+            const extraLabels = ['1929 · Великий крах', '1934 · банкротство', '1940 · финал'];
+            const labels = episodes.map(e => e[0]).concat(extraLabels);
+            const results = episodes.map(e => e[1]).concat([null, null, null]);
+            // Реальные якоря из биографии (Смиттен, NYT 1915, jesse-livermore.com); null = нет данных
+            const idx = name => labels.indexOf(name);
+            const real = new Array(labels.length).fill(null);
+            real[idx('1907 · шорт в панику')] = 3000000;        // Смиттен: ~$3 млн за панику
+            real[idx('1908 · хлопок (совет Томаса)')] = 300000; // Смиттен: от $3 млн осталось <$300 тыс.
+            real[idx('1915 · Bethlehem Steel')] = 0;            // февраль 1915: официальное банкротство
+            real[idx('1929 · Великий крах')] = 100000000;       // легенда: ~$100 млн, документов нет
+            real[idx('1934 · банкротство')] = 0;                // долги ~$2,3–2,5 млн
+            real[idx('1940 · финал')] = 0;                      // состояние < $10 тыс.
+            const IDX_1929 = idx('1929 · Великий крах');
             // Условный капитал: кумулятивная сумма результатов; хлопок-1908 считаем обнулением
             let run = 0;
             const capital = episodes.map(e => {
                 if (e[1] === null) { run = 0; return 0; } // банкротство
                 run += e[1];
                 return run;
-            });
+            }).concat([null, null, null]); // точки за пределами книги
             // Отметки банкротств: капитал ушёл в минус или обнулился
-            const bankruptIdx = capital.map((v, i) => v <= 0 ? i : -1).filter(i => i >= 0);
+            const bankruptIdx = capital.map((v, i) => (v !== null && v <= 0) ? i : -1).filter(i => i >= 0);
+
+            // Краткие описания сделок для тултипов
+            const descs = [
+                'Все свои деньги — в акции по наводке, проверенной по дневнику',
+                'Полгода самостоятельной игры в бакетшопах',
+                'Шорт частями по чутью, закрыт на следующий день после землетрясения',
+                'Послушал совет Хардинга против собственного анализа',
+                'Отбил часть убытка лонгом на хаях по своему чутью',
+                'Правильный прогноз, неправильное время — сгорел на отскоках',
+                'Отбился после слива и уехал во Францию уже с этой суммой',
+                'Шорт в кризис ликвидности; на дне закрыл шорт и переобулся в лонг',
+                'Один неверный вход после кризиса — минус миллион',
+                '440 тыс. кип по чужой наводке; продал яхты, ушёл в долги',
+                'С $25 от банкира — по 150% в неделю, вернул сноровку',
+                'Сделал то, что просил благодетель, — и потерял всё',
+                'Полтора месяца изучения рынка ради одного входа по 98.99',
+                'Лонги фаворитов → шорт откативших, 12 компаний',
+                'Шорт в день объявления неограниченной подводной войны',
+                'Лонг 15 000 кип против логики рынка',
+                'U.S. Steel и Utah Copper; продал всё на пункт ниже максимума',
+                'Дважды ошибся со входом и выходом, убыток потом отбил',
+                'Шорт против инсайдеров, откупил 30 000 акций на дне паники',
+                'За пределами книги: шорт перед крахом 1929-го; $100 млн — легенда, документов нет',
+                'За пределами книги: третье банкротство, долги ~$2,3–2,5 млн',
+                'За пределами книги: ушёл из жизни 28 ноября 1940-го, состояние < $10 тыс.'
+            ];
 
             const fmt = v => {
                 const sign = v < 0 ? '−' : '';
@@ -1056,6 +1187,24 @@
                             pointBackgroundColor: capital.map((v, i) => bankruptIdx.includes(i) ? DOWN : SEPIA),
                             pointBorderColor: capital.map((v, i) => bankruptIdx.includes(i) ? DOWN : SEPIA),
                             order: 1
+                        },
+                        {
+                            type: 'line',
+                            label: 'Реальный Ливермор (биография)',
+                            data: real,
+                            yAxisID: 'y1',
+                            borderColor: '#7d92ad',
+                            borderDash: [6, 5],
+                            borderWidth: 2,
+                            spanGaps: true,
+                            fill: false,
+                            tension: 0,
+                            pointRadius: real.map(v => v === null ? 0 : 5),
+                            pointHoverRadius: 7,
+                            pointBackgroundColor: real.map((v, i) => i === IDX_1929 ? '#161a20' : '#7d92ad'),
+                            pointBorderColor: '#7d92ad',
+                            pointBorderWidth: 2,
+                            order: 0
                         }
                     ]
                 },
@@ -1073,17 +1222,31 @@
                             borderWidth: 1,
                             titleColor: '#e6dfd2',
                             bodyColor: BODY,
+                            footerColor: '#8d8776',
+                            footerFont: { family: "'Golos Text', sans-serif", size: 11, style: 'italic' },
                             callbacks: {
                                 label(ctx) {
                                     const i = ctx.dataIndex;
-                                    if (ctx.dataset.type === 'bar') {
-                                        return results[i] === null
-                                            ? ' Результат: банкротство (~−90% капитала)'
-                                            : ' Результат: ' + (results[i] >= 0 ? '+' : '') + fmt(results[i]).replace('−', '−');
+                                    if (ctx.dataset.yAxisID === 'y1') {
+                                        if (real[i] === null) return null;
+                                        let s = ' Реальный Ливермор: ' + (i === IDX_1929 ? '~' : '') + fmt(real[i]);
+                                        if (i === IDX_1929) s += ' · легенда, документов нет';
+                                        return s;
                                     }
-                                    let s = ' Капитал: ' + fmt(capital[i]);
+                                    if (ctx.dataset.type === 'bar') {
+                                        if (results[i] === null) {
+                                            return i < BOOK_LEN ? ' Результат: банкротство (~−90% капитала)' : null;
+                                        }
+                                        return ' Результат: ' + (results[i] >= 0 ? '+' : '') + fmt(results[i]);
+                                    }
+                                    if (capital[i] === null) return null;
+                                    let s = ' Капитал (книга): ' + fmt(capital[i]);
                                     if (bankruptIdx.includes(i)) s += ' · БАНКРОТСТВО';
                                     return s;
+                                },
+                                footer(items) {
+                                    if (!items.length) return '';
+                                    return '—\n' + descs[items[0].dataIndex];
                                 }
                             }
                         }
@@ -1105,6 +1268,15 @@
                                 callback: v => fmt(v)
                             },
                             grid: { color: 'rgba(255,255,255,0.06)' }
+                        },
+                        y1: {
+                            position: 'right',
+                            ticks: {
+                                color: '#7d92ad',
+                                font: { family: "'JetBrains Mono', monospace", size: 10 },
+                                callback: v => fmt(v)
+                            },
+                            grid: { drawOnChartArea: false }
                         }
                     }
                 }
